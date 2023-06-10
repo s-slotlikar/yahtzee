@@ -58,6 +58,20 @@ public class Dice {
 	}
 	
 	/**
+	 * Iterates through the set of dices and creates a frequency table
+	 * @return A frequency table which gets the count for each occurrence in the user's set of dices
+	 */
+	public int[] buildFrequencyTable() {
+		int[] freqTable = new int[getNumSides() + 1];
+		
+		for (int i = 0; i < getNumDice(); i++) {
+			freqTable[dices[i].getValue()]++;
+		}
+		
+		return freqTable;
+	}
+	
+	/**
 	 * Obtains the value of a single die in the array
 	 * @param dieNum Indicate which die to get 
 	 * @return The value of the die 
@@ -70,7 +84,7 @@ public class Dice {
 	 * Gets the sum of the dice without rolling
 	 * @return
 	 */
-	public int sum() {
+	public int addScore() {
 		int total = 0;
 		
 		for (int i = 0; i < dices.length; i++) {
