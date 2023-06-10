@@ -14,6 +14,7 @@ import java.awt.TextField;
 import javax.swing.JToggleButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import java.awt.Color;
 
 /**
  * Creates a new window that contains the Yahtzee UI
@@ -236,7 +237,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		
 		//Three of a Kind Toggle
 		threeOfAKindToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -252,13 +252,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(THREE_OF_A_KIND, score);
 				lowerScoreTextBoxArray[THREE_OF_A_KIND].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -277,13 +271,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(FOUR_OF_A_KIND, score);
 				lowerScoreTextBoxArray[FOUR_OF_A_KIND].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -302,13 +290,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(FULL_HOUSE, score);
 				lowerScoreTextBoxArray[FULL_HOUSE].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -327,13 +309,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(SMALL_STRAIGHT, score);
 				lowerScoreTextBoxArray[SMALL_STRAIGHT].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -352,13 +328,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(LARGE_STRAIGHT, score);
 				lowerScoreTextBoxArray[LARGE_STRAIGHT].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -377,13 +347,7 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(YAHTZEE, score);
 				lowerScoreTextBoxArray[YAHTZEE].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
@@ -400,16 +364,11 @@ public class MainFrame extends JFrame {
 				game.setLowerScoreCat(CHANCE, score);
 				lowerScoreTextBoxArray[CHANCE].setText("" + score);
 				
-				showTotals();
-				
-				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
-					manageUIState(BEFORE_FIRST_ROLL);
-				} else {
-					manageUIState(GAME_OVER);
-				}
+				advanceTurn();
 			}
 		});
 		
+		//Reset Button
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageUIState(RESET_GAME);
@@ -442,7 +401,7 @@ public class MainFrame extends JFrame {
 				
 				break;
 			case BEFORE_THIRD_ROLL:
-				
+				//We do nothing (:
 				break;
 			case AFTER_THIRD_ROLL:
 				//Disable the Roll Button
@@ -455,7 +414,7 @@ public class MainFrame extends JFrame {
 				game.nextTurn();
 				break;
 			case GAME_OVER:
-				
+				JOptionPane.showMessageDialog(null, "Your Score was" + game.getGrandTotal());
 				break;
 			default:
 				JOptionPane.showMessageDialog(this, "Invalid UI state detected");
@@ -501,6 +460,16 @@ public class MainFrame extends JFrame {
 		upperScoreTextField.setText("" + game.getSumUpperScores());
 		lowerScoreTextField.setText("" + game.getSumLowerScores());
 		grandTotalTextField.setText("" + game.getGrandTotal());
+	}
+	
+	public void advanceTurn() {
+		this.showTotals();
+		
+		if (game.getCurrentTurnNum() <= GameModel.MAX_NUM_TURNS) {
+			manageUIState(BEFORE_FIRST_ROLL);
+		} else {
+			manageUIState(GAME_OVER);
+		}
 	}
 	
 	//Helper Methods
@@ -577,7 +546,7 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
-	//All the UI Components setup here
+	//All the UI Components are setup here
 	public void initUIComponents() {
 		//Panel
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -675,86 +644,104 @@ public class MainFrame extends JFrame {
 		contentPane.add(chanceToggle);
 		
 		aceTextField = new JTextField();
+		aceTextField.setEditable(false);
 		aceTextField.setBounds(132, 214, 53, 19);
 		contentPane.add(aceTextField);
 		aceTextField.setColumns(10);
 		
 		twosTextField = new JTextField();
+		twosTextField.setEditable(false);
 		twosTextField.setBounds(132, 259, 53, 19);
 		contentPane.add(twosTextField);
 		twosTextField.setColumns(10);
 		
 		threesTextField = new JTextField();
+		threesTextField.setEditable(false);
 		threesTextField.setColumns(10);
 		threesTextField.setBounds(132, 304, 53, 19);
 		contentPane.add(threesTextField);
 		
 		foursTextField = new JTextField();
+		foursTextField.setEditable(false);
 		foursTextField.setColumns(10);
 		foursTextField.setBounds(132, 349, 53, 19);
 		contentPane.add(foursTextField);
 		
 		fivesTextField = new JTextField();
+		fivesTextField.setEditable(false);
 		fivesTextField.setColumns(10);
 		fivesTextField.setBounds(132, 394, 53, 19);
 		contentPane.add(fivesTextField);
 		
 		sixesTextField = new JTextField();
+		sixesTextField.setEditable(false);
 		sixesTextField.setColumns(10);
 		sixesTextField.setBounds(132, 439, 53, 19);
 		contentPane.add(sixesTextField);
 		
 		threeOfAKindTextField = new JTextField();
+		threeOfAKindTextField.setForeground(new Color(0, 0, 0));
+		threeOfAKindTextField.setEditable(false);
 		threeOfAKindTextField.setColumns(10);
 		threeOfAKindTextField.setBounds(379, 214, 59, 19);
 		contentPane.add(threeOfAKindTextField);
 		
 		fourOfAKindTextField = new JTextField();
+		fourOfAKindTextField.setEditable(false);
 		fourOfAKindTextField.setColumns(10);
 		fourOfAKindTextField.setBounds(379, 259, 59, 19);
 		contentPane.add(fourOfAKindTextField);
 		
 		fullHouseTextField = new JTextField();
+		fullHouseTextField.setEditable(false);
 		fullHouseTextField.setColumns(10);
 		fullHouseTextField.setBounds(379, 304, 59, 19);
 		contentPane.add(fullHouseTextField);
 		
 		smallStraightTextField = new JTextField();
+		smallStraightTextField.setEditable(false);
 		smallStraightTextField.setColumns(10);
 		smallStraightTextField.setBounds(379, 349, 59, 19);
 		contentPane.add(smallStraightTextField);
 		
 		largeStraightTextField = new JTextField();
+		largeStraightTextField.setEditable(false);
 		largeStraightTextField.setColumns(10);
 		largeStraightTextField.setBounds(379, 394, 59, 19);
 		contentPane.add(largeStraightTextField);
 		
 		yahtzeeTextField = new JTextField();
+		yahtzeeTextField.setEditable(false);
 		yahtzeeTextField.setColumns(10);
 		yahtzeeTextField.setBounds(379, 439, 59, 19);
 		contentPane.add(yahtzeeTextField);
 		
 		chanceTextField = new JTextField();
+		chanceTextField.setEditable(false);
 		chanceTextField.setColumns(10);
 		chanceTextField.setBounds(379, 483, 59, 19);
 		contentPane.add(chanceTextField);
 		
 		bonusTextField = new JTextField();
+		bonusTextField.setEditable(false);
 		bonusTextField.setColumns(10);
 		bonusTextField.setBounds(132, 477, 53, 19);
 		contentPane.add(bonusTextField);
 		
 		upperScoreTextField = new JTextField();
+		upperScoreTextField.setEditable(false);
 		upperScoreTextField.setColumns(10);
 		upperScoreTextField.setBounds(132, 505, 53, 19);
 		contentPane.add(upperScoreTextField);
 		
 		lowerScoreTextField = new JTextField();
+		lowerScoreTextField.setEditable(false);
 		lowerScoreTextField.setColumns(10);
 		lowerScoreTextField.setBounds(379, 522, 59, 19);
 		contentPane.add(lowerScoreTextField);
 		
 		grandTotalTextField = new JTextField();
+		grandTotalTextField.setEditable(false);
 		grandTotalTextField.setColumns(10);
 		grandTotalTextField.setBounds(379, 551, 59, 19);
 		contentPane.add(grandTotalTextField);
@@ -781,7 +768,8 @@ public class MainFrame extends JFrame {
 		contentPane.add(grandTotalLabel);
 		holdArray = new boolean[NUM_DICE];
 	}
-
+	
+	//All the Process Components are setup here
 	public void initProcessComponents() {
 		//Initializes the set of dices
 		myDice = new Dice(NUM_DICE, NUM_SIDES);		
