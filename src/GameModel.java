@@ -40,8 +40,7 @@ public class GameModel {
 
 	//Lower Score Combinations
 	public boolean isThreeOfAKind(Dice myDice) {
-		int[] freqTable;
-		freqTable = myDice.buildFrequencyTable();
+		int[] freqTable = myDice.buildFrequencyTable();
 		
 		boolean foundThreeOfAKind = false;
 		
@@ -68,16 +67,60 @@ public class GameModel {
 		return foundFourOfAKind;
 	}
 	public boolean isFullHouse(Dice myDice){
-		return false;
+		int[] freqTable = myDice.buildFrequencyTable();
+		
+		boolean foundFreqOfThree = false;
+		boolean foundFreqOfTwo = false;
+		
+		for (int i = 1; i <= myDice.getNumSides(); i++) {
+			if (freqTable[i] == 3) {
+				foundFreqOfThree = true;
+			} else if (freqTable[i] == 2) {
+				foundFreqOfTwo = true;
+			}
+		}
+		
+		return foundFreqOfThree && foundFreqOfTwo;
+		
 	}
 	public boolean isSmallStraight(Dice myDice) {
+		int[] freqTable = myDice.buildFrequencyTable();
+		
+		if (freqTable[3] >= 1 && freqTable[4] >= 1) {
+			if (freqTable[1] >= 1 && freqTable[2] >= 1) {
+				return true;
+			} else if (freqTable[2] >= 1 && freqTable[5] >= 1) {
+				return true;
+			} else if (freqTable[5] >= 1 && freqTable[6] >= 1) {
+				return true;
+			}
+		}
+		
+		
 		return false;
 	}
 	public boolean isLargeStraight(Dice myDice) {
-		return false;
+		int[] freqTable = myDice.buildFrequencyTable();
+		
+		for (int i = 1; i <= myDice.getNumSides(); i++) {
+			if (freqTable[i] > 1) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	public boolean isYahtzee(Dice myDice) {
-		return false;
+		int[] freqTable = myDice.buildFrequencyTable();
+		
+		boolean foundYahtzee = false;
+		
+		for (int i = 1; i <= myDice.getNumSides(); i++) {
+			if (freqTable[i] == 5) {
+				foundYahtzee = true;
+			}
+		}
+		return foundYahtzee;
 	}
 	
 	//Score
@@ -135,9 +178,12 @@ public class GameModel {
 	public void nextTurn() {
 		currentTurnNum++;
 	}
-	
+	public void resetTurnNum() {
+		currentTurnNum = 1;
+	}
+
 	//Lower Cats
-	public void clearAllLowerScoreCats() {
+	public void clearAllLowerScoringCats() {
 		for (int i = 0; i < NUM_LOWER_SCORE_CATS; i++) {
 			lowerScoreCategories[i] = 0;
 		}
@@ -153,7 +199,7 @@ public class GameModel {
 	}
 	
 	//Upper Cats
-	public void clearAllUpperScoreCats() {
+	public void clearAllUpperScoringCats() {
 		for (int i = 1; i <= NUM_UPPER_SCORE_CATS; i++) {
 			upperScoreCategories[i] = 0;
 		}

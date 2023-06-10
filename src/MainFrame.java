@@ -117,59 +117,11 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		/* UI Components */
 		initUIComponents();
+		
 		/* Initialization of Instance Variables */
-		
-		//Initializes the set of dices
-		myDice = new Dice(NUM_DICE, NUM_SIDES);		
-		//Initialize an array of buttons for each die
-		diceToggleButtons = new JToggleButton[NUM_DICE];
-		diceToggleButtons[0] = diceToggle1;
-		diceToggleButtons[1] = diceToggle2;
-		diceToggleButtons[2] = diceToggle3;
-		diceToggleButtons[3] = diceToggle4;
-		diceToggleButtons[4] = diceToggle6;
-		
-		upperScoreButtonArray = new JToggleButton[GameModel.NUM_UPPER_SCORE_CATS + 1];
-		upperScoreButtonArray[1] = this.aceToggle;
-		upperScoreButtonArray[2] = this.twosToggle;
-		upperScoreButtonArray[3] = this.threesToggle;
-		upperScoreButtonArray[4] = this.foursToggle;
-		upperScoreButtonArray[5] = this.fivesToggle;
-		upperScoreButtonArray[6] = this.sixesToggle;
-		
-		upperScoreTextBoxArray = new JTextField[GameModel.NUM_UPPER_SCORE_CATS + 1];
-		upperScoreTextBoxArray[1] = this.aceTextField;
-		upperScoreTextBoxArray[2] = this.twosTextField;
-		upperScoreTextBoxArray[3] = this.threesTextField;
-		upperScoreTextBoxArray[4] = this.foursTextField;
-		upperScoreTextBoxArray[5] = this.fivesTextField;
-		upperScoreTextBoxArray[6] = this.sixesTextField;
-		
-		lowerScoreButtonArray = new JToggleButton[GameModel.NUM_LOWER_SCORE_CATS];
-		lowerScoreButtonArray[THREE_OF_A_KIND] = this.threeOfAKindToggle;
-		lowerScoreButtonArray[FOUR_OF_A_KIND] = this.fourOfAKindToggle;
-		lowerScoreButtonArray[FULL_HOUSE] = this.fullHouseToggle;
-		lowerScoreButtonArray[SMALL_STRAIGHT] = this.smallStraightToggle;
-		lowerScoreButtonArray[LARGE_STRAIGHT] = this.largeStraightToggle;
-		lowerScoreButtonArray[YAHTZEE] = this.yahtzeeToggle;
-		lowerScoreButtonArray[CHANCE] = this.chanceToggle;
-		
-		lowerScoreTextBoxArray = new JTextField[GameModel.NUM_LOWER_SCORE_CATS];
-		lowerScoreTextBoxArray[THREE_OF_A_KIND] = this.threeOfAKindTextField;
-		lowerScoreTextBoxArray[FOUR_OF_A_KIND] = this.fourOfAKindTextField;
-		lowerScoreTextBoxArray[FULL_HOUSE] = this.fullHouseTextField;
-		lowerScoreTextBoxArray[SMALL_STRAIGHT] = this.smallStraightTextField;
-		lowerScoreTextBoxArray[LARGE_STRAIGHT] = this.largeStraightTextField;
-		lowerScoreTextBoxArray[YAHTZEE] = this.yahtzeeTextField;
-		lowerScoreTextBoxArray[CHANCE] = this.chanceTextField;
-		
-		holdArray = new boolean[NUM_DICE];
-		
-		game = new GameModel();
-		
-		manageUIState(RESET_GAME);
-		manageUIState(BEFORE_FIRST_ROLL);
-		
+		initProcessComponents();
+
+		/* Event Listeners */
 		//Roll Button
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -334,15 +286,148 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
+		
+		//Full House Toggle
+		fullHouseToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int score = 0;
+				
+				game.setUsedLowerScoreCat(FULL_HOUSE, true);
+				manageUIState(SCORING);
+				
+				if (game.isFullHouse(myDice)) {
+					score = 25;
+				}
+				
+				game.setLowerScoreCat(FULL_HOUSE, score);
+				lowerScoreTextBoxArray[FULL_HOUSE].setText("" + score);
+				
+				showTotals();
+				
+				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+					manageUIState(BEFORE_FIRST_ROLL);
+				} else {
+					manageUIState(GAME_OVER);
+				}
+			}
+		});
+		
+		//Small Straight Toggle
+		smallStraightToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int score = 0;
+				
+				game.setUsedLowerScoreCat(SMALL_STRAIGHT, true);
+				manageUIState(SCORING);
+				
+				if (game.isSmallStraight(myDice)) {
+					score = 30;
+				}
+				
+				game.setLowerScoreCat(SMALL_STRAIGHT, score);
+				lowerScoreTextBoxArray[SMALL_STRAIGHT].setText("" + score);
+				
+				showTotals();
+				
+				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+					manageUIState(BEFORE_FIRST_ROLL);
+				} else {
+					manageUIState(GAME_OVER);
+				}
+			}
+		});
+		
+		//Large Straight Toggle
+		largeStraightToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int score = 0;
+				
+				game.setUsedLowerScoreCat(LARGE_STRAIGHT, true);
+				manageUIState(SCORING);
+				
+				if (game.isLargeStraight(myDice)) {
+					score = 40;
+				}
+				
+				game.setLowerScoreCat(LARGE_STRAIGHT, score);
+				lowerScoreTextBoxArray[LARGE_STRAIGHT].setText("" + score);
+				
+				showTotals();
+				
+				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+					manageUIState(BEFORE_FIRST_ROLL);
+				} else {
+					manageUIState(GAME_OVER);
+				}
+			}
+		});
+		
+		//Yahtzee Toggle
+		yahtzeeToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int score = 0;
+				
+				game.setUsedLowerScoreCat(YAHTZEE, true);
+				manageUIState(SCORING);
+				
+				if (game.isYahtzee(myDice)) {
+					score = 50;
+				}
+				
+				game.setLowerScoreCat(YAHTZEE, score);
+				lowerScoreTextBoxArray[YAHTZEE].setText("" + score);
+				
+				showTotals();
+				
+				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+					manageUIState(BEFORE_FIRST_ROLL);
+				} else {
+					manageUIState(GAME_OVER);
+				}
+			}
+		});
+		
+		//Chance Toggle
+		chanceToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int score = 0;
+				
+				game.setUsedLowerScoreCat(CHANCE, true);
+				manageUIState(SCORING);
+				
+				score = myDice.addScore();
+				
+				game.setLowerScoreCat(CHANCE, score);
+				lowerScoreTextBoxArray[CHANCE].setText("" + score);
+				
+				showTotals();
+				
+				if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+					manageUIState(BEFORE_FIRST_ROLL);
+				} else {
+					manageUIState(GAME_OVER);
+				}
+			}
+		});
+		
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageUIState(RESET_GAME);
+				manageUIState(BEFORE_FIRST_ROLL);
+			}
+		});
 	}
 	
 	//Util Methods
 	public void manageUIState(int nextState) {
 		switch(nextState) {
 			case RESET_GAME:
-//				game.clearAllUpperScoringCats();
-//				game.clearAllLowerScoringCats();
-				
+				game.clearAllUpperScoringCats();
+				game.clearAllLowerScoringCats();
+				game.clearUsedScoringCats();
+				game.resetTurnNum();
+				this.clearAllTextBoxes();
+				this.resetScoreToggleButtons();
 				break; 
 			case BEFORE_FIRST_ROLL:
 				rollButton.setEnabled(true);
@@ -374,32 +459,31 @@ public class MainFrame extends JFrame {
 				break;
 			default:
 				JOptionPane.showMessageDialog(this, "Invalid UI state detected");
-				
 				break;
 		}
 		currentUIState = nextState;
 	}
 	
-	public void addLowerScore(int index) {
+	public void addLowerScore(int category) {
 		int score = 0;
 		
 		//set the category used
-		game.setUsedUpperScoreCat(index, true);
+		game.setUsedUpperScoreCat(category, true);
 		
 		//Advance the UI State to Scoring State
 		manageUIState(SCORING);
 		
 		for (int i = 0; i < NUM_DICE; i++) {
-			if (myDice.getDieValue(i) == index) {
-				score += index;
+			if (myDice.getDieValue(i) == category) {
+				score += category;
 			}
 		}
 		
 		//Set the instance field in the game model that holds the index's score
-		game.setUpperScoreCat(index, score);
+		game.setUpperScoreCat(category, score);
 		
 		//Show the computed score in the UI
-		upperScoreTextBoxArray[index].setText("" + score);
+		upperScoreTextBoxArray[category].setText("" + score);
 		
 		//Update the UI for all the total scores
 		this.showTotals();
@@ -420,6 +504,32 @@ public class MainFrame extends JFrame {
 	}
 	
 	//Helper Methods
+	public void resetScoreToggleButtons() {
+		for (int i = 1; i <= GameModel.NUM_UPPER_SCORE_CATS; i++) {
+			upperScoreButtonArray[i].setSelected(false);
+			
+		}
+		
+		for (int i = 0; i < GameModel.NUM_LOWER_SCORE_CATS; i++) {
+			lowerScoreButtonArray[i].setSelected(false);
+		}
+	}
+	
+	private void clearAllTextBoxes() {
+		for (int i = 1; i <= GameModel.NUM_UPPER_SCORE_CATS; i++) {
+			upperScoreTextBoxArray[i].setText("");
+		}
+		
+		for (int i = 0; i < GameModel.NUM_LOWER_SCORE_CATS; i++) {
+			lowerScoreTextBoxArray[i].setText("");
+		}
+		
+		upperScoreTextField.setText("");
+		lowerScoreTextField.setText("");
+		bonusTextField.setText("");
+		grandTotalTextField.setText("");
+	}
+	
 	private void enableAllUnusedScoreButtons() {
 		for (int i = 0; i < GameModel.NUM_LOWER_SCORE_CATS; i++) {
 			if (!game.getUsedLowerScoringCatState(i)) {
@@ -670,5 +780,58 @@ public class MainFrame extends JFrame {
 		grandTotalLabel.setBounds(267, 557, 102, 13);
 		contentPane.add(grandTotalLabel);
 		holdArray = new boolean[NUM_DICE];
+	}
+
+	public void initProcessComponents() {
+		//Initializes the set of dices
+		myDice = new Dice(NUM_DICE, NUM_SIDES);		
+		//Initialize an array of buttons for each die
+		diceToggleButtons = new JToggleButton[NUM_DICE];
+		diceToggleButtons[0] = diceToggle1;
+		diceToggleButtons[1] = diceToggle2;
+		diceToggleButtons[2] = diceToggle3;
+		diceToggleButtons[3] = diceToggle4;
+		diceToggleButtons[4] = diceToggle6;
+		
+		upperScoreButtonArray = new JToggleButton[GameModel.NUM_UPPER_SCORE_CATS + 1];
+		upperScoreButtonArray[1] = this.aceToggle;
+		upperScoreButtonArray[2] = this.twosToggle;
+		upperScoreButtonArray[3] = this.threesToggle;
+		upperScoreButtonArray[4] = this.foursToggle;
+		upperScoreButtonArray[5] = this.fivesToggle;
+		upperScoreButtonArray[6] = this.sixesToggle;
+		
+		upperScoreTextBoxArray = new JTextField[GameModel.NUM_UPPER_SCORE_CATS + 1];
+		upperScoreTextBoxArray[1] = this.aceTextField;
+		upperScoreTextBoxArray[2] = this.twosTextField;
+		upperScoreTextBoxArray[3] = this.threesTextField;
+		upperScoreTextBoxArray[4] = this.foursTextField;
+		upperScoreTextBoxArray[5] = this.fivesTextField;
+		upperScoreTextBoxArray[6] = this.sixesTextField;
+		
+		lowerScoreButtonArray = new JToggleButton[GameModel.NUM_LOWER_SCORE_CATS];
+		lowerScoreButtonArray[THREE_OF_A_KIND] = this.threeOfAKindToggle;
+		lowerScoreButtonArray[FOUR_OF_A_KIND] = this.fourOfAKindToggle;
+		lowerScoreButtonArray[FULL_HOUSE] = this.fullHouseToggle;
+		lowerScoreButtonArray[SMALL_STRAIGHT] = this.smallStraightToggle;
+		lowerScoreButtonArray[LARGE_STRAIGHT] = this.largeStraightToggle;
+		lowerScoreButtonArray[YAHTZEE] = this.yahtzeeToggle;
+		lowerScoreButtonArray[CHANCE] = this.chanceToggle;
+		
+		lowerScoreTextBoxArray = new JTextField[GameModel.NUM_LOWER_SCORE_CATS];
+		lowerScoreTextBoxArray[THREE_OF_A_KIND] = this.threeOfAKindTextField;
+		lowerScoreTextBoxArray[FOUR_OF_A_KIND] = this.fourOfAKindTextField;
+		lowerScoreTextBoxArray[FULL_HOUSE] = this.fullHouseTextField;
+		lowerScoreTextBoxArray[SMALL_STRAIGHT] = this.smallStraightTextField;
+		lowerScoreTextBoxArray[LARGE_STRAIGHT] = this.largeStraightTextField;
+		lowerScoreTextBoxArray[YAHTZEE] = this.yahtzeeTextField;
+		lowerScoreTextBoxArray[CHANCE] = this.chanceTextField;
+		
+		holdArray = new boolean[NUM_DICE];
+		
+		game = new GameModel();
+		
+		manageUIState(RESET_GAME);
+		manageUIState(BEFORE_FIRST_ROLL);
 	}
 }
