@@ -6,10 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import java.awt.Point;
-import java.awt.TextField;
 
 import javax.swing.JToggleButton;
 import javax.swing.JTextField;
@@ -22,6 +20,10 @@ import java.awt.Color;
  */
 public class MainFrame extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//UI State Machine Constants
 	public final static int RESET_GAME = 0;
 	public final static int BEFORE_FIRST_ROLL = 1;
