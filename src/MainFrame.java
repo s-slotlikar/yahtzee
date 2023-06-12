@@ -414,7 +414,7 @@ public class MainFrame extends JFrame {
 				game.nextTurn();
 				break;
 			case GAME_OVER:
-				JOptionPane.showMessageDialog(null, "Your Score was" + game.getGrandTotal());
+				JOptionPane.showMessageDialog(null, "Your Score was " + game.getGrandTotal());
 				break;
 			default:
 				JOptionPane.showMessageDialog(this, "Invalid UI state detected");
@@ -447,7 +447,7 @@ public class MainFrame extends JFrame {
 		//Update the UI for all the total scores
 		this.showTotals();
 		
-		if (game.getCurrentTurnNum() < GameModel.MAX_NUM_TURNS) {
+		if (game.getCurrentTurnNum() <= GameModel.MAX_NUM_TURNS) {
 			manageUIState(BEFORE_FIRST_ROLL);
 		} else {
 			manageUIState(GAME_OVER);
@@ -525,7 +525,6 @@ public class MainFrame extends JFrame {
 	
 	private void clearAndDisableHoldButtons() {
 		for (int i = 0; i < diceToggleButtons.length; i++) {
-			System.out.println("disabled button");
 			diceToggleButtons[i].setText("");
 			diceToggleButtons[i].setEnabled(false);
 			diceToggleButtons[i].setSelected(false);
@@ -534,13 +533,11 @@ public class MainFrame extends JFrame {
 	
 	private void clearDiceArray() {
 		for (int i = 0; i < NUM_DICE; i++) {
-			System.out.println("cleared hold array");
 			holdArray[i] = false;
 		}
 	}
 	
 	private void setHoldButtonsEnableState(boolean isEnabled) {
-		System.out.println("enabled button");
 		for (int i = 0; i < diceToggleButtons.length; i++) {
 			diceToggleButtons[i].setEnabled(isEnabled);
 		}
